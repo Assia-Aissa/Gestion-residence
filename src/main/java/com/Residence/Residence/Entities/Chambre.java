@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,10 +28,33 @@ public class Chambre {
     @Enumerated(EnumType.STRING)
     private StatutChambre statut;
 
-    @OneToOne(mappedBy = "chambre")
+    @OneToOne(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
     private Resident resident;
 
-    @Override
+    @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RequeteMaintenance> maintenances;
+
+    @ManyToOne
+    @JoinColumn(name = "administrateur_id")
+    private Administrateur administrateur;
+
+        public Administrateur getAdministrateur() {
+                return administrateur;
+        }
+
+        public void setAdministrateur(Administrateur administrateur) {
+                this.administrateur = administrateur;
+        }
+
+        public List<RequeteMaintenance> getMaintenances() {
+                return maintenances;
+        }
+
+        public void setMaintenances(List<RequeteMaintenance> maintenances) {
+                this.maintenances = maintenances;
+        }
+
+        @Override
     public String toString() {
         return "Chambre{" +
                 "id=" + id +

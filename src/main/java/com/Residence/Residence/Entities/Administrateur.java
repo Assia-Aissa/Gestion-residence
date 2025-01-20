@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Data
 
 public class Administrateur {
 
@@ -26,6 +29,9 @@ public class Administrateur {
 
         @Enumerated(EnumType.STRING)
         private Role role;
+
+    @OneToMany(mappedBy = "administrateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Chambre> chambres;
 
         // Getters and Setters
         public Long getId() {

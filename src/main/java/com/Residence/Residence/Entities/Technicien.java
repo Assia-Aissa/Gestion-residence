@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Data
 public class Technicien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Technicien {
     private String specialite;
     private String telephone;
 
-    @OneToMany(mappedBy = "technicien")
+    @OneToMany(mappedBy = "technicien" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RequeteMaintenance> requetesAssignees;
 
     public Long getId() {
@@ -32,12 +32,12 @@ public class Technicien {
         this.id = id;
     }
 
-    public List<RequeteMaintenance> getRequetesAssignees() {
-        return requetesAssignees;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setRequetesAssignees(List<RequeteMaintenance> requetesAssignees) {
-        this.requetesAssignees = requetesAssignees;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getSpecialite() {
@@ -48,12 +48,12 @@ public class Technicien {
         this.specialite = specialite;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public List<RequeteMaintenance> getRequetesAssignees() {
+        return requetesAssignees;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setRequetesAssignees(List<RequeteMaintenance> requetesAssignees) {
+        this.requetesAssignees = requetesAssignees;
     }
 
     public String getPrenom() {

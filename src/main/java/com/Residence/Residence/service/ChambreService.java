@@ -1,10 +1,9 @@
 package com.Residence.Residence.service;
 
-import com.Residence.Residence.DTO.ChambreRequestDto;
+
 import com.Residence.Residence.DTO.ChambreResponseDto;
 import com.Residence.Residence.Entities.Chambre;
 import com.Residence.Residence.Repository.ChambreRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,58 +12,72 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ChambreService  {
+public class ChambreService {
 
+    private final ChambreRepository chambreRepository;
 
-        private final ChambreRepository chambreRepository;
-        private final ModelMapper modelMapper;
+    @Autowired
+    public ChambreService(ChambreRepository chambreRepository) {
+        this.chambreRepository = chambreRepository;
+    }
 
-        @Autowired
-        public ChambreService(ChambreRepository chambreRepository, ModelMapper modelMapper) {
-            this.chambreRepository = chambreRepository;
-            this.modelMapper = modelMapper;
-        }
+    // Create
+    public ChambreResponseDto save(Chambre chambre) {
+        Chambre saved = chambreRepository.save(chambre);
+        return mapToDto(saved);
+    }
 
-        // Create
-        public ChambreResponseDto save(ChambreRequestDto chambreRequestDto) {
-            Chambre chambre = modelMapper.map(chambreRequestDto, Chambre.class);
-            Chambre saved = chambreRepository.save(chambre);
-            return modelMapper.map(saved, ChambreResponseDto.class);
-        }
+    // Read All
+    public List<ChambreResponseDto> findAll() {
+        return chambreRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
 
-        // Read All
-        public List<ChambreResponseDto> findAll() {
-            return chambreRepository.findAll().stream()
-                    .map(chambre -> modelMapper.map(chambre, ChambreResponseDto.class))
-                    .collect(Collectors.toList());
-        }
+    // Read by ID
+    public ChambreResponseDto findById(Long id) {
+        Chambre chambre = chambreRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chambre not found"));
+        return mapToDto(chambre);
+    }
 
-        // Read by ID
-        public ChambreResponseDto findById(Long id) {
-            Chambre chambre = chambreRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Chambre not found"));
-            return modelMapper.map(chambre, ChambreResponseDto.class);
-        }
-
-        // Update
-        public ChambreResponseDto update(ChambreRequestDto chambreRequestDto, Long id) {
-            Optional<Chambre> chambreOptional = chambreRepository.findById(id);
-            if (chambreOptional.isPresent()) {
-                Chambre chambre = chambreOptional.get();
-                modelMapper.map(chambreRequestDto, chambre);
-                chambre.setId(id);
-                Chambre updated = chambreRepository.save(chambre);
-                return modelMapper.map(updated, ChambreResponseDto.class);
-            } else {
-                throw new RuntimeException("Chambre not found");
-            }
-        }
-
-        // Delete
-        public void delete(Long id) {
-            chambreRepository.deleteById(id);
+    // Update
+    public ChambreResponseDto update(Chambre chambre, Long id) {
+        Optional<Chambre> chambreOptional = chambreRepository.findById(id);
+        if (chambreOptional.isPresent()) {
+            Chambre existingChambre = chambreOptional.get();
+            existingChambre.setNumero(chambre.getNumero());
+            existingChambre.setTaille(chambre.getTaille());
+            existingChambre.setEquipements(chambre.getEquipements());
+            existingChambre.setStatut(chambre.getStatut());
+            Chambre updated = chambreRepository.save(existingChambre);
+            return mapToDto(updated);
+        } else {
+            throw new RuntimeException("Chambre not found");
         }
     }
 
+    // Delete
+    public void delete(Long id) {
+        chambreRepository.deleteById(id);
+    }
 
+    // Helper method to map Chambre to ChambreResponseDto
+    private ChambreResponseDto mapToDto(Chambre chambre) {
+        ChambreResponseDto dto = new ChambreResponseDto();
+        dto.setId(chambre.getId());
+        dto.setNumero(chambre.getNumero());
+        dto.setTaille(chambre.getTaille());
+        dto.setEquipements(chambre.getEquipements());
+        dto.setStatut(chambre.getStatut());
 
+        if (chambre.getResident() != null) {
+            ChambreResponseDto.ResidentInfo residentInfo = new ChambreResponseDto.ResidentInfo();
+            residentInfo.setNom(chambre.getResident().getNom());
+            residentInfo.setPrenom(chambre.getResident().getPrenom());
+            dto.setResident(residentInfo);
+        }
+
+        return dto;
+    }
+}

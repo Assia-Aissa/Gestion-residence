@@ -34,6 +34,14 @@ public class RequeteMaintenance {
     @JoinColumn(name = "chambre_id")
     private Chambre chambre;
 
+    public Chambre getChambre() {
+        return chambre;
+    }
+
+    public void setChambre(Chambre chambre) {
+        this.chambre = chambre;
+    }
+
     public Date getDateSignalement() {
         return dateSignalement;
     }
@@ -48,14 +56,6 @@ public class RequeteMaintenance {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Chambre getChambre() {
-        return chambre;
-    }
-
-    public void setChambre(Chambre chambre) {
-        this.chambre = chambre;
     }
 
     public Long getId() {

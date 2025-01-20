@@ -1,15 +1,12 @@
 package com.Residence.Residence.controller;
 
-
-import com.Residence.Residence.DTO.AdminRequestDto;
-import com.Residence.Residence.DTO.AdminResponseDto;
+import com.Residence.Residence.Entities.Administrateur;
 import com.Residence.Residence.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -22,32 +19,32 @@ public class AdminController {
 
     // Create
     @PostMapping
-    public ResponseEntity<AdminResponseDto> save(@Valid @RequestBody AdminRequestDto adminRequestDto) {
-        AdminResponseDto adminResponseDto = adminService.save(adminRequestDto);
-        return new ResponseEntity<>(adminResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<Administrateur> save(@Valid @RequestBody Administrateur administrateur) {
+        Administrateur savedAdmin = adminService.save(administrateur);
+        return new ResponseEntity<>(savedAdmin, HttpStatus.CREATED);
     }
 
     // Read All
     @GetMapping
-    public ResponseEntity<List<AdminResponseDto>> findAll() {
-        List<AdminResponseDto> admins = adminService.findAll();
+    public ResponseEntity<List<Administrateur>> findAll() {
+        List<Administrateur> admins = adminService.findAll();
         return ResponseEntity.ok(admins);
     }
 
     // Read by ID
     @GetMapping("/{id}")
-    public ResponseEntity<AdminResponseDto> findById(@PathVariable Long id) {
-        AdminResponseDto adminResponseDto = adminService.findById(id);
-        return ResponseEntity.ok(adminResponseDto);
+    public ResponseEntity<Administrateur> findById(@PathVariable Long id) {
+        Administrateur admin = adminService.findById(id);
+        return ResponseEntity.ok(admin);
     }
 
     // Update
     @PutMapping("/{id}")
-    public ResponseEntity<AdminResponseDto> update(
-            @Valid @RequestBody AdminRequestDto adminRequestDto,
+    public ResponseEntity<Administrateur> update(
+            @Valid @RequestBody Administrateur administrateur,
             @PathVariable Long id) {
-        AdminResponseDto adminResponseDto = adminService.update(adminRequestDto, id);
-        return ResponseEntity.ok(adminResponseDto);
+        Administrateur updatedAdmin = adminService.update(administrateur, id);
+        return ResponseEntity.ok(updatedAdmin);
     }
 
     // Delete

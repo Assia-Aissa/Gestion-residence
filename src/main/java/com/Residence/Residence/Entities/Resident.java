@@ -1,15 +1,20 @@
 package com.Residence.Residence.Entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Getter
+@Setter
 public class Resident {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +30,11 @@ public class Resident {
     private String adresse;
     private Date dateNaissance;
 
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Paiement> historiquePaiements ;
 
-
-    @OneToMany(mappedBy = "resident")
-    private List<Paiement> historiquePaiements;
-
-    @OneToMany(mappedBy = "resident")
-    private List<RequeteMaintenance> historiqueRequetes;
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<RequeteMaintenance> historiqueRequetes ;
 
     @OneToOne
     private Chambre chambre;
@@ -44,60 +47,12 @@ public class Resident {
         this.adresse = adresse;
     }
 
-    public Chambre getChambre() {
-        return chambre;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setChambre(Chambre chambre) {
-        this.chambre = chambre;
-    }
-
-    public Date getDateNaissance() {
-        return dateNaissance;
-    }
-
-    public void setDateNaissance(Date dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Paiement> getHistoriquePaiements() {
-        return historiquePaiements;
-    }
-
-    public void setHistoriquePaiements(List<Paiement> historiquePaiements) {
-        this.historiquePaiements = historiquePaiements;
-    }
-
-    public List<RequeteMaintenance> getHistoriqueRequetes() {
-        return historiqueRequetes;
-    }
-
-    public void setHistoriqueRequetes(List<RequeteMaintenance> historiqueRequetes) {
-        this.historiqueRequetes = historiqueRequetes;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getPrenom() {
@@ -108,11 +63,59 @@ public class Resident {
         this.prenom = prenom;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getNom() {
+        return nom;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<RequeteMaintenance> getHistoriqueRequetes() {
+        return historiqueRequetes;
+    }
+
+    public void setHistoriqueRequetes(List<RequeteMaintenance> historiqueRequetes) {
+        this.historiqueRequetes = historiqueRequetes;
+    }
+
+    public List<Paiement> getHistoriquePaiements() {
+        return historiquePaiements;
+    }
+
+    public void setHistoriquePaiements(List<Paiement> historiquePaiements) {
+        this.historiquePaiements = historiquePaiements;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(Date dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public Chambre getChambre() {
+        return chambre;
+    }
+
+    public void setChambre(Chambre chambre) {
+        this.chambre = chambre;
     }
 }

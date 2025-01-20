@@ -1,8 +1,8 @@
 package com.Residence.Residence.controller;
 
 
-import com.Residence.Residence.DTO.ChambreRequestDto;
 import com.Residence.Residence.DTO.ChambreResponseDto;
+import com.Residence.Residence.Entities.Chambre;
 import com.Residence.Residence.service.ChambreService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,45 +17,43 @@ import java.util.List;
 @RequestMapping("/chambres")
 public class ChambreController {
 
-        @Autowired
-        private ChambreService chambreService;
+    @Autowired
+    private ChambreService chambreService;
 
-        // Create
-        @PostMapping
-        public ResponseEntity<ChambreResponseDto> save(@Valid @RequestBody ChambreRequestDto chambreRequestDto) {
-            ChambreResponseDto chambreResponseDto = chambreService.save(chambreRequestDto);
-            return new ResponseEntity<>(chambreResponseDto, HttpStatus.CREATED);
-        }
-
-        // Read All
-        @GetMapping
-        public ResponseEntity<List<ChambreResponseDto>> findAll() {
-            List<ChambreResponseDto> chambres = chambreService.findAll();
-            return ResponseEntity.ok(chambres);
-        }
-
-        // Read by ID
-        @GetMapping("/{id}")
-        public ResponseEntity<ChambreResponseDto> findById(@PathVariable Long id) {
-            ChambreResponseDto chambreResponseDto = chambreService.findById(id);
-            return ResponseEntity.ok(chambreResponseDto);
-        }
-
-        // Update
-        @PutMapping("/{id}")
-        public ResponseEntity<ChambreResponseDto> update(
-                @Valid @RequestBody ChambreRequestDto chambreRequestDto,
-                @PathVariable Long id) {
-            ChambreResponseDto chambreResponseDto = chambreService.update(chambreRequestDto, id);
-            return ResponseEntity.ok(chambreResponseDto);
-        }
-
-        // Delete
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> delete(@PathVariable Long id) {
-            chambreService.delete(id);
-            return ResponseEntity.noContent().build();
-        }
+    // Create
+    @PostMapping
+    public ResponseEntity<ChambreResponseDto> save(@Valid @RequestBody Chambre chambre) {
+        ChambreResponseDto savedChambre = chambreService.save(chambre);
+        return new ResponseEntity<>(savedChambre, HttpStatus.CREATED);
     }
 
+    // Read All
+    @GetMapping
+    public ResponseEntity<List<ChambreResponseDto>> findAll() {
+        List<ChambreResponseDto> chambres = chambreService.findAll();
+        return ResponseEntity.ok(chambres);
+    }
 
+    // Read by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ChambreResponseDto> findById(@PathVariable Long id) {
+        ChambreResponseDto chambre = chambreService.findById(id);
+        return ResponseEntity.ok(chambre);
+    }
+
+    // Update
+    @PutMapping("/{id}")
+    public ResponseEntity<ChambreResponseDto> update(
+            @Valid @RequestBody Chambre chambre,
+            @PathVariable Long id) {
+        ChambreResponseDto updatedChambre = chambreService.update(chambre, id);
+        return ResponseEntity.ok(updatedChambre);
+    }
+
+    // Delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        chambreService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}

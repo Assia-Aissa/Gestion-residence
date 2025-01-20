@@ -1,8 +1,7 @@
 package com.Residence.Residence.controller;
 
 
-import com.Residence.Residence.DTO.PaiementRequestDto;
-import com.Residence.Residence.DTO.PaiementResponseDto;
+import com.Residence.Residence.Entities.Paiement;
 import com.Residence.Residence.service.PaiementService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,40 +16,35 @@ import java.util.List;
 public class PaiementController {
 
     @Autowired
-    private  PaiementService paiementService;
+    private PaiementService paiementService;
 
-    public PaiementController(PaiementService paiementService) {
-        this.paiementService = paiementService;
-    }
-
-    // Create
     @PostMapping
-    public ResponseEntity<PaiementResponseDto> save(@Valid @RequestBody PaiementRequestDto paiementRequestDto) {
-        PaiementResponseDto paiementResponseDto = paiementService.save(paiementRequestDto);
-        return new ResponseEntity<>(paiementResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<Paiement> save(@Valid @RequestBody Paiement paiement) {
+        Paiement savedPaiement = paiementService.save(paiement);
+        return new ResponseEntity<>(savedPaiement, HttpStatus.CREATED);
     }
 
     // Read All
     @GetMapping
-    public ResponseEntity<List<PaiementResponseDto>> findAll() {
-        List<PaiementResponseDto> paiements = paiementService.findAll();
+    public ResponseEntity<List<Paiement>> findAll() {
+        List<Paiement> paiements = paiementService.findAll();
         return ResponseEntity.ok(paiements);
     }
 
     // Read by ID
     @GetMapping("/{id}")
-    public ResponseEntity<PaiementResponseDto> findById(@PathVariable Long id) {
-        PaiementResponseDto paiementResponseDto = paiementService.findById(id);
-        return ResponseEntity.ok(paiementResponseDto);
+    public ResponseEntity<Paiement> findById(@PathVariable Long id) {
+        Paiement paiement = paiementService.findById(id);
+        return ResponseEntity.ok(paiement);
     }
 
     // Update
     @PutMapping("/{id}")
-    public ResponseEntity<PaiementResponseDto> update(
-            @Valid @RequestBody PaiementRequestDto paiementRequestDto,
+    public ResponseEntity<Paiement> update(
+            @Valid @RequestBody Paiement paiement,
             @PathVariable Long id) {
-        PaiementResponseDto paiementResponseDto = paiementService.update(paiementRequestDto, id);
-        return ResponseEntity.ok(paiementResponseDto);
+        Paiement updatedPaiement = paiementService.update(paiement, id);
+        return ResponseEntity.ok(updatedPaiement);
     }
 
     // Delete
