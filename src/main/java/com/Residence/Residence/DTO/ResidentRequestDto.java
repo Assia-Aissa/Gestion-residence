@@ -1,14 +1,19 @@
 package com.Residence.Residence.DTO;
-import java.util.Date;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class ResidentRequestDto {
     private String nom;
     private String prenom;
+
+    @NotNull(message = "Email cannot be null")
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
     private String telephone;
     private String adresse;
-    private Date dateNaissance;
-    private Long chambreId;
+
+    private String chambreNumber; // Use chambre number instead of ID
 
     // Getters and Setters
     public String getNom() {
@@ -51,19 +56,23 @@ public class ResidentRequestDto {
         this.adresse = adresse;
     }
 
-    public Date getDateNaissance() {
-        return dateNaissance;
+    public String getChambreNumber() {
+        return chambreNumber;
     }
 
-    public void setDateNaissance(Date dateNaissance) {
-        this.dateNaissance = dateNaissance;
+    public void setChambreNumber(String chambreNumber) {
+        this.chambreNumber = chambreNumber;
     }
 
-   public Long getChambreId() {
-        return chambreId;
-    }
-
-    public void setChambreId(Long chambreId) {
-        this.chambreId = chambreId;
+    @Override
+    public String toString() {
+        return "ResidentRequestDto{" +
+                "adresse='" + adresse + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", chambreNumber='" + chambreNumber + '\'' +
+                '}';
     }
 }

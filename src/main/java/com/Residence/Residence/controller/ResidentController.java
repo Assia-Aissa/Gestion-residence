@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @AllArgsConstructor
 @NoArgsConstructor
 @RestController
@@ -24,14 +24,14 @@ public class ResidentController {
     private ResidentService residentService;
 
     // Create
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ResidentResponseDto> save(@Valid @RequestBody ResidentRequestDto residentRequestDto) {
         ResidentResponseDto residentResponseDto = residentService.save(residentRequestDto);
         return new ResponseEntity<>(residentResponseDto, HttpStatus.CREATED);
     }
 
     // Read All
-    @GetMapping
+    @GetMapping("/getAllResidets")
     public ResponseEntity<List<ResidentResponseDto>> findAll() {
         List<ResidentResponseDto> residents = residentService.findAll();
         return ResponseEntity.ok(residents);

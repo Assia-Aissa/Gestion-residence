@@ -9,6 +9,9 @@ public class PaiementRequestDto {
     private double montantPaye;
     private StatutPaiement statut;
     private Date datePaiement;
+    private String recu;
+    private Long residentId;
+
 
     public Date getDatePaiement() {
         return datePaiement;
@@ -58,6 +61,5 @@ public class PaiementRequestDto {
         this.montantDu = montantDu;
     }
 
-    private String recu;
-    private Long residentId;
+
 }

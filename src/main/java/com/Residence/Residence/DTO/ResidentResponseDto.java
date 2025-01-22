@@ -1,5 +1,4 @@
 package com.Residence.Residence.DTO;
-import java.util.Date;
 
 public class ResidentResponseDto {
     private Long id;
@@ -8,8 +7,7 @@ public class ResidentResponseDto {
     private String email;
     private String telephone;
     private String adresse;
-    private Date dateNaissance;
-   private Long chambreId;
+    private String chambreNumber; // Add chambre number
 
     // Getters and Setters
     public Long getId() {
@@ -60,19 +58,24 @@ public class ResidentResponseDto {
         this.adresse = adresse;
     }
 
-    public Date getDateNaissance() {
-        return dateNaissance;
+    public String getChambreNumber() {
+        return chambreNumber;
     }
 
-    public void setDateNaissance(Date dateNaissance) {
-        this.dateNaissance = dateNaissance;
+    public void setChambreNumber(String chambreNumber) {
+        this.chambreNumber = chambreNumber;
     }
 
-   public Long getChambreId() {
-        return chambreId;
-    }
-
-    public void setChambreId(Long chambreId) {
-        this.chambreId = chambreId;
+    @Override
+    public String toString() {
+        return "ResidentResponseDto{" +
+                "adresse='" + adresse + '\'' +
+                ", id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", chambreNumber='" + chambreNumber + '\'' +
+                '}';
     }
 }

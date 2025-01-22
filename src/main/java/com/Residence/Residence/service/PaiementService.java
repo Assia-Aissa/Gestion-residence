@@ -27,6 +27,8 @@ public class PaiementService {
     }
 
     // Create
+
+
     public PaiementResponseDto save(PaiementRequestDto paiementRequestDto) {
         Paiement paiement = modelMapper.map(paiementRequestDto, Paiement.class);
 
@@ -34,12 +36,21 @@ public class PaiementService {
         Resident resident = residentRepository.findById(paiementRequestDto.getResidentId())
                 .orElseThrow(() -> new RuntimeException("Resident not found"));
         paiement.setResident(resident);
-        System.out.println("--------------->"+resident);
-        Paiement saved = paiementRepository.save(paiement);
-        System.out.println("--------------->"+saved);
-        return modelMapper.map(saved, PaiementResponseDto.class);
-    }
 
+        Paiement saved = paiementRepository.save(paiement);
+
+        // Map the saved Paiement to PaiementResponseDto
+        PaiementResponseDto responseDto = modelMapper.map(saved, PaiementResponseDto.class);
+        responseDto.setResidentNom(resident.getNom()); // Include resident's name
+        responseDto.setResidentPrenom(resident.getPrenom()); // Include resident's first name
+
+        return responseDto;
+    }
+    public List<PaiementResponseDto> getPaiementsByResidentId(Long residentId) {
+        return paiementRepository.findByResidentId(residentId).stream()
+                .map(paiement -> modelMapper.map(paiement, PaiementResponseDto.class))
+                .collect(Collectors.toList());
+    }
     // Read All
     public List<PaiementResponseDto> findAll() {
         return paiementRepository.findAll().stream()

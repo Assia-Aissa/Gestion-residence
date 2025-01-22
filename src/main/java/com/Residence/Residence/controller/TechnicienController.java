@@ -1,7 +1,9 @@
 package com.Residence.Residence.controller;
 
 
-import com.Residence.Residence.Entities.Technicien;
+import com.Residence.Residence.DTO.TechnicienRequestDTO;
+import com.Residence.Residence.DTO.TechnicienResponseDTO;
+
 import com.Residence.Residence.service.TechnicienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/techniciens")
 public class TechnicienController {
@@ -18,39 +19,39 @@ public class TechnicienController {
     @Autowired
     private TechnicienService technicienService;
 
-    // Create
+    // Create a new Technicien
     @PostMapping
-    public ResponseEntity<Technicien> save(@RequestBody Technicien technicien) {
-        Technicien savedTechnicien = technicienService.save(technicien);
-        return new ResponseEntity<>(savedTechnicien, HttpStatus.CREATED);
+    public ResponseEntity<TechnicienResponseDTO> createTechnicien(@RequestBody TechnicienRequestDTO requestDTO) {
+        TechnicienResponseDTO responseDTO = technicienService.createTechnicien(requestDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    // Read All
+    // Get all Techniciens
     @GetMapping
-    public ResponseEntity<List<Technicien>> findAll() {
-        List<Technicien> techniciens = technicienService.findAll();
-        return ResponseEntity.ok(techniciens);
+    public ResponseEntity<List<TechnicienResponseDTO>> getAllTechniciens() {
+        List<TechnicienResponseDTO> techniciens = technicienService.getAllTechniciens();
+        return new ResponseEntity<>(techniciens, HttpStatus.OK);
     }
 
-    // Read by ID
+    // Get a Technicien by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Technicien> findById(@PathVariable Long id) {
-        Optional<Technicien> technicien = technicienService.findById(id);
-        return technicien.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<TechnicienResponseDTO> getTechnicienById(@PathVariable Long id) {
+        TechnicienResponseDTO responseDTO = technicienService.getTechnicienById(id);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    // Update
+    // Update a Technicien
     @PutMapping("/{id}")
-    public ResponseEntity<Technicien> update(@PathVariable Long id, @RequestBody Technicien technicienDetails) {
-        Technicien updatedTechnicien = technicienService.update(id, technicienDetails);
-        return ResponseEntity.ok(updatedTechnicien);
+    public ResponseEntity<TechnicienResponseDTO> updateTechnicien(
+            @PathVariable Long id, @RequestBody TechnicienRequestDTO requestDTO) {
+        TechnicienResponseDTO responseDTO = technicienService.updateTechnicien(id, requestDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    // Delete
+    // Delete a Technicien
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        technicienService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteTechnicien(@PathVariable Long id) {
+        technicienService.deleteTechnicien(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

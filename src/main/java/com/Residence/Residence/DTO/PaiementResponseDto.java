@@ -5,67 +5,81 @@ import com.Residence.Residence.Entities.StatutPaiement;
 import java.util.Date;
 
 public class PaiementResponseDto {
-    private Long id;
-    private double montantDu;
-    private double montantPaye;
-    private StatutPaiement statut;
-    private Date datePaiement;
-    private String recu;
-    private Long residentId;
 
-    public Long getId() {
-        return id;
-    }
+        private Long id;
+       // private double montantDu;
+        private double montantPaye;
+        private StatutPaiement statut;
+        private Date datePaiement;
+        private String recu;
+        private Long residentId; // Include residentId
+        private String residentNom; // Include resident's name
+        private String residentPrenom; // Include resident's first name
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+        // Getters and Setters
+        public Long getId() {
+            return id;
+        }
 
-    public Date getDatePaiement() {
-        return datePaiement;
-    }
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-    public void setDatePaiement(Date datePaiement) {
-        this.datePaiement = datePaiement;
-    }
 
-    public double getMontantDu() {
-        return montantDu;
-    }
+        public double getMontantPaye() {
+            return montantPaye;
+        }
 
-    public void setMontantDu(double montantDu) {
-        this.montantDu = montantDu;
-    }
+        public void setMontantPaye(double montantPaye) {
+            this.montantPaye = montantPaye;
+        }
 
-    public double getMontantPaye() {
-        return montantPaye;
-    }
+        public StatutPaiement getStatut() {
+            return statut;
+        }
 
-    public void setMontantPaye(double montantPaye) {
-        this.montantPaye = montantPaye;
-    }
+        public void setStatut(StatutPaiement statut) {
+            this.statut = statut;
+        }
 
-    public String getRecu() {
-        return recu;
-    }
+        public Date getDatePaiement() {
+            return datePaiement;
+        }
 
-    public void setRecu(String recu) {
-        this.recu = recu;
-    }
+        public void setDatePaiement(Date datePaiement) {
+            this.datePaiement = datePaiement;
+        }
 
-    public Long getResidentId() {
-        return residentId;
-    }
+        public String getRecu() {
+            return recu;
+        }
 
-    public void setResidentId(Long residentId) {
-        this.residentId = residentId;
-    }
+        public void setRecu(String recu) {
+            this.recu = recu;
+        }
 
-    public StatutPaiement getStatut() {
-        return statut;
-    }
+        public Long getResidentId() {
+            return residentId;
+        }
 
-    public void setStatut(StatutPaiement statut) {
-        this.statut = statut;
-    }
+        public void setResidentId(Long residentId) {
+            this.residentId = residentId;
+        }
+
+        public String getResidentNom() {
+            return residentNom;
+        }
+
+        public void setResidentNom(String residentNom) {
+            this.residentNom = residentNom;
+        }
+
+        public String getResidentPrenom() {
+            return residentPrenom;
+        }
+
+        public void setResidentPrenom(String residentPrenom) {
+            this.residentPrenom = residentPrenom;
+        }
+
 }

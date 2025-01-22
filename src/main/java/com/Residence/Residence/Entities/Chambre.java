@@ -24,7 +24,7 @@ public class Chambre {
     private String equipements;
 
     @Enumerated(EnumType.STRING)
-    private StatutChambre statut;
+    private StatutChambre statut = StatutChambre.DISPONIBLE;
 
     @OneToOne(mappedBy = "chambre")
     private Resident resident;

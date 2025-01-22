@@ -3,11 +3,12 @@ package com.Residence.Residence.DTO;
 import com.Residence.Residence.Entities.Role;
 
 public class AdminRequestDto {
+
     private String nom;
     private String prenom;
     private String email;
     private String motDePasse;
-    private Role role;
+   // private Role role;
 
     // Getters and Setters
     public String getNom() {
@@ -42,12 +43,5 @@ public class AdminRequestDto {
         this.motDePasse = motDePasse;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
 }

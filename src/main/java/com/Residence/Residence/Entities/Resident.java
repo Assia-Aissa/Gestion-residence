@@ -23,7 +23,7 @@ public class Resident {
 
     private String telephone;
     private String adresse;
-    private Date dateNaissance;
+    //private Date dateNaissance;
 
 
 
@@ -48,17 +48,23 @@ public class Resident {
         return chambre;
     }
 
+    @Override
+    public String toString() {
+        return "Resident{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", adresse='" + adresse + '\'' +
+
+                ", chambre=" + (chambre != null ? chambre.getId() : "null") +
+                '}';
+    }
     public void setChambre(Chambre chambre) {
         this.chambre = chambre;
     }
 
-    public Date getDateNaissance() {
-        return dateNaissance;
-    }
-
-    public void setDateNaissance(Date dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
 
     public String getEmail() {
         return email;

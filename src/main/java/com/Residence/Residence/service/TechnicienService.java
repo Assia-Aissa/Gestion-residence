@@ -1,56 +1,75 @@
 package com.Residence.Residence.service;
 
-
+import com.Residence.Residence.DTO.AssignTechDto;
+import com.Residence.Residence.DTO.TechnicienRequestDTO;
+import com.Residence.Residence.DTO.TechnicienResponseDTO;
+import com.Residence.Residence.Entities.RequeteMaintenance;
 import com.Residence.Residence.Entities.Technicien;
+
+import com.Residence.Residence.Repository.RequeteMaintenanceRepository;
 import com.Residence.Residence.Repository.TechnicienRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TechnicienService {
 
-    private final TechnicienRepository technicienRepository;
+    @Autowired
+    private TechnicienRepository technicienRepository;
+
 
     @Autowired
-    public TechnicienService(TechnicienRepository technicienRepository) {
-        this.technicienRepository = technicienRepository;
+    private ModelMapper modelMapper;
+
+    // Create a new Technicien
+    public TechnicienResponseDTO createTechnicien(TechnicienRequestDTO requestDTO) {
+        // Map RequestDTO to Entity
+        Technicien technicien = modelMapper.map(requestDTO, Technicien.class);
+          System.out.println("--------------------"+technicien);
+        // Save the entity
+        Technicien savedTechnicien = technicienRepository.save(technicien);
+            System.out.println("----------------------->"+savedTechnicien);
+        // Map Entity to ResponseDTO
+        return modelMapper.map(savedTechnicien, TechnicienResponseDTO.class);
     }
 
-    // Create
-    public Technicien save(Technicien technicien) {
-        return technicienRepository.save(technicien);
+    // Get all Techniciens
+    public List<TechnicienResponseDTO> getAllTechniciens() {
+        return technicienRepository.findAll().stream()
+                .map(technicien -> modelMapper.map(technicien, TechnicienResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    // Read All
-    public List<Technicien> findAll() {
-        return technicienRepository.findAll();
+    // Get a Technicien by ID
+    public TechnicienResponseDTO getTechnicienById(Long id) {
+        Technicien technicien = technicienRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Technicien not found"));
+        return modelMapper.map(technicien, TechnicienResponseDTO.class);
     }
 
-    // Read by ID
-    public Optional<Technicien> findById(Long id) {
-        return technicienRepository.findById(id);
+    // Update a Technicien
+    public TechnicienResponseDTO updateTechnicien(Long id, TechnicienRequestDTO requestDTO) {
+        Technicien technicien = technicienRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Technicien not found"));
+
+        // Map RequestDTO to existing Entity
+        modelMapper.map(requestDTO, technicien);
+
+        // Save the updated entity
+        Technicien updatedTechnicien = technicienRepository.save(technicien);
+
+        // Map Entity to ResponseDTO
+        return modelMapper.map(updatedTechnicien, TechnicienResponseDTO.class);
     }
 
-    // Update
-    public Technicien update(Long id, Technicien technicienDetails) {
-        Optional<Technicien> technicienOptional = technicienRepository.findById(id);
-        if (technicienOptional.isPresent()) {
-            Technicien technicien = technicienOptional.get();
-            technicien.setNom(technicienDetails.getNom());
-            technicien.setPrenom(technicienDetails.getPrenom());
-            technicien.setSpecialite(technicienDetails.getSpecialite());
-            technicien.setTelephone(technicienDetails.getTelephone());
-            return technicienRepository.save(technicien);
-        } else {
-            throw new RuntimeException("Technicien not found");
-        }
-    }
-
-    // Delete
-    public void delete(Long id) {
+    // Delete a Technicien
+    public void deleteTechnicien(Long id) {
         technicienRepository.deleteById(id);
     }
+
+
 }

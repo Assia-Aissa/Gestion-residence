@@ -1,59 +1,92 @@
 package com.Residence.Residence.service;
-
-
+import com.Residence.Residence.DTO.RequeteMaintenanceRequestDTO;
 import com.Residence.Residence.Entities.RequeteMaintenance;
 import com.Residence.Residence.Repository.RequeteMaintenanceRepository;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.Residence.Residence.DTO.RequeteMaintenanceResponseDTO;
+import com.Residence.Residence.Entities.Resident;
+import com.Residence.Residence.Entities.Technicien;
+import com.Residence.Residence.Entities.Chambre;
+import com.Residence.Residence.Entities.StatutRequete;
+import com.Residence.Residence.Repository.ResidentRepository;
+import com.Residence.Residence.Repository.TechnicienRepository;
+import com.Residence.Residence.Repository.ChambreRepository;
+import org.modelmapper.ModelMapper;
+
+import java.util.Date;
+
+import java.util.stream.Collectors;
 
 @Service
 public class RequeteMaintenanceService {
 
-    private final RequeteMaintenanceRepository requeteMaintenanceRepository;
+    @Autowired
+    private RequeteMaintenanceRepository requeteMaintenanceRepository;
 
     @Autowired
-    public RequeteMaintenanceService(RequeteMaintenanceRepository requeteMaintenanceRepository) {
-        this.requeteMaintenanceRepository = requeteMaintenanceRepository;
+    private ResidentRepository residentRepository;
+
+    @Autowired
+    private TechnicienRepository technicienRepository;
+
+    @Autowired
+    private ChambreRepository chambreRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    // Create a new maintenance request
+    public RequeteMaintenanceResponseDTO createRequeteMaintenance(RequeteMaintenanceRequestDTO requestDTO) {
+        // Explicit mapping setup
+        ModelMapper modelMapper = new ModelMapper();
+
+        RequeteMaintenance requeteMaintenance = modelMapper.map(requestDTO, RequeteMaintenance.class);
+
+        requeteMaintenance.setDateSignalement(new Date());
+        requeteMaintenance.setStatut(StatutRequete.EN_ATTENTE);
+
+        // Save the entity and return the response DTO
+        RequeteMaintenance savedRequete = requeteMaintenanceRepository.save(requeteMaintenance);
+        return modelMapper.map(savedRequete, RequeteMaintenanceResponseDTO.class);
     }
 
-    // Create
-    public RequeteMaintenance save(RequeteMaintenance requeteMaintenance) {
-        return requeteMaintenanceRepository.save(requeteMaintenance);
+
+    // Get all maintenance requests
+    public List<RequeteMaintenanceResponseDTO> getAllRequeteMaintenances() {
+        List<RequeteMaintenance> requetes = requeteMaintenanceRepository.findAll();
+        return requetes.stream()
+                .map(requete -> modelMapper.map(requete, RequeteMaintenanceResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    // Read All
-    public List<RequeteMaintenance> findAll() {
-        return requeteMaintenanceRepository.findAll();
+    // Get a maintenance request by ID
+    public RequeteMaintenanceResponseDTO getRequeteMaintenanceById(Long id) {
+        Optional<RequeteMaintenance> requete = requeteMaintenanceRepository.findById(id);
+        return requete.map(value -> modelMapper.map(value, RequeteMaintenanceResponseDTO.class))
+                .orElseThrow(() -> new RuntimeException("RequeteMaintenance not found"));
     }
 
-    // Read by ID
-    public Optional<RequeteMaintenance> findById(Long id) {
-        return requeteMaintenanceRepository.findById(id);
+    // Update a maintenance request
+    public RequeteMaintenanceResponseDTO updateRequeteMaintenance(Long id, RequeteMaintenanceRequestDTO requestDTO) {
+        RequeteMaintenance existingRequete = requeteMaintenanceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("RequeteMaintenance not found"));
+
+        modelMapper.map(requestDTO, existingRequete);
+        existingRequete.setId(id); // Ensure the ID is not changed
+
+
+
+        RequeteMaintenance updatedRequete = requeteMaintenanceRepository.save(existingRequete);
+        return modelMapper.map(updatedRequete, RequeteMaintenanceResponseDTO.class);
     }
 
-    // Update
-    public RequeteMaintenance update(Long id, RequeteMaintenance requeteMaintenanceDetails) {
-        Optional<RequeteMaintenance> requeteOptional = requeteMaintenanceRepository.findById(id);
-        if (requeteOptional.isPresent()) {
-            RequeteMaintenance requeteMaintenance = requeteOptional.get();
-            requeteMaintenance.setDescription(requeteMaintenanceDetails.getDescription());
-            requeteMaintenance.setDateSignalement(requeteMaintenanceDetails.getDateSignalement());
-            requeteMaintenance.setStatut(requeteMaintenanceDetails.getStatut());
-            requeteMaintenance.setResident(requeteMaintenanceDetails.getResident());
-            requeteMaintenance.setTechnicien(requeteMaintenanceDetails.getTechnicien());
-            requeteMaintenance.setChambre(requeteMaintenanceDetails.getChambre());
-            return requeteMaintenanceRepository.save(requeteMaintenance);
-        } else {
-            throw new RuntimeException("RequeteMaintenance not found");
-        }
-    }
-
-    // Delete
-    public void delete(Long id) {
+    // Delete a maintenance request
+    public void deleteRequeteMaintenance(Long id) {
         requeteMaintenanceRepository.deleteById(id);
     }
-
 }

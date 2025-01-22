@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 @RequestMapping("/paiements")
 public class PaiementController {
@@ -25,9 +25,10 @@ public class PaiementController {
 
     // Create
     @PostMapping
-    public ResponseEntity<PaiementResponseDto> save(@Valid @RequestBody PaiementRequestDto paiementRequestDto) {
-        PaiementResponseDto paiementResponseDto = paiementService.save(paiementRequestDto);
-        return new ResponseEntity<>(paiementResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<PaiementResponseDto> createPaiement(@RequestBody PaiementRequestDto requestDTO) {
+        System.out.println("Received request: " + requestDTO); // Log the request payload
+        PaiementResponseDto responseDTO = paiementService.save(requestDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     // Read All
@@ -36,7 +37,11 @@ public class PaiementController {
         List<PaiementResponseDto> paiements = paiementService.findAll();
         return ResponseEntity.ok(paiements);
     }
-
+    @GetMapping("/resident/{residentId}")
+    public ResponseEntity<List<PaiementResponseDto>> getPaiementsByResidentId(@PathVariable Long residentId) {
+        List<PaiementResponseDto> paiements = paiementService.getPaiementsByResidentId(residentId);
+        return new ResponseEntity<>(paiements, HttpStatus.OK);
+    }
     // Read by ID
     @GetMapping("/{id}")
     public ResponseEntity<PaiementResponseDto> findById(@PathVariable Long id) {

@@ -16,7 +16,7 @@ public class Paiement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double montantDu;
+    //private double montantDu;
     private double montantPaye;
 
     @Enumerated(EnumType.STRING)
@@ -45,13 +45,7 @@ public class Paiement {
         this.id = id;
     }
 
-    public double getMontantDu() {
-        return montantDu;
-    }
 
-    public void setMontantDu(double montantDu) {
-        this.montantDu = montantDu;
-    }
 
     public double getMontantPaye() {
         return montantPaye;

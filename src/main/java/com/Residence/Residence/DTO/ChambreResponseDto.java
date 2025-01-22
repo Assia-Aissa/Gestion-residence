@@ -3,7 +3,8 @@ package com.Residence.Residence.DTO;
 import com.Residence.Residence.Entities.StatutChambre;
 import lombok.*;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChambreResponseDto {
 
         private Long id;
@@ -12,7 +13,8 @@ public class ChambreResponseDto {
         private String equipements;
         private StatutChambre statut;
 
-        // Getters and Setters
+
+    // Getters and Setters
         public Long getId() {
             return id;
         }

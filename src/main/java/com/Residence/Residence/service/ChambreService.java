@@ -1,8 +1,10 @@
 package com.Residence.Residence.service;
 
+import com.Residence.Residence.DTO.AdminResponseDto;
 import com.Residence.Residence.DTO.ChambreRequestDto;
 import com.Residence.Residence.DTO.ChambreResponseDto;
 import com.Residence.Residence.Entities.Chambre;
+import com.Residence.Residence.Entities.StatutChambre;
 import com.Residence.Residence.Repository.ChambreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,12 @@ public class ChambreService  {
             this.modelMapper = modelMapper;
         }
 
+    public List<ChambreResponseDto> getAvailableChambres() {
+        List<Chambre> availableChambres = chambreRepository.findByStatut(StatutChambre.DISPONIBLE);
+        return availableChambres.stream()
+                .map(chambre -> modelMapper.map(chambre, ChambreResponseDto.class))
+                .collect(Collectors.toList());
+    }
         // Create
         public ChambreResponseDto save(ChambreRequestDto chambreRequestDto) {
             Chambre chambre = modelMapper.map(chambreRequestDto, Chambre.class);
@@ -33,13 +41,16 @@ public class ChambreService  {
         }
 
         // Read All
-        public List<ChambreResponseDto> findAll() {
-            return chambreRepository.findAll().stream()
-                    .map(chambre -> modelMapper.map(chambre, ChambreResponseDto.class))
-                    .collect(Collectors.toList());
-        }
 
-        // Read by ID
+
+     public List<ChambreResponseDto> getAllChambres() {
+        List<Chambre> chambres = chambreRepository.findAll();
+        return chambres.stream()
+                .map(chambre -> modelMapper.map(chambre, ChambreResponseDto.class))
+                .collect(Collectors.toList());
+    }
+
+    // Read by ID
         public ChambreResponseDto findById(Long id) {
             Chambre chambre = chambreRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Chambre not found"));
@@ -49,11 +60,14 @@ public class ChambreService  {
         // Update
         public ChambreResponseDto update(ChambreRequestDto chambreRequestDto, Long id) {
             Optional<Chambre> chambreOptional = chambreRepository.findById(id);
+
             if (chambreOptional.isPresent()) {
                 Chambre chambre = chambreOptional.get();
                 modelMapper.map(chambreRequestDto, chambre);
                 chambre.setId(id);
+                System.out.println("------------>"+chambre);
                 Chambre updated = chambreRepository.save(chambre);
+                System.out.println("------------>"+updated);
                 return modelMapper.map(updated, ChambreResponseDto.class);
             } else {
                 throw new RuntimeException("Chambre not found");

@@ -24,6 +24,18 @@ public class Technicien {
     @OneToMany(mappedBy = "technicien")
     private List<RequeteMaintenance> requetesAssignees;
 
+    @Override
+    public String toString() {
+        return "Technicien{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", specialite='" + specialite + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", requetesAssignees=" + requetesAssignees +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
